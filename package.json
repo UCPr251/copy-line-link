@@ -4,6 +4,11 @@
   "description": "右键复制文件指定行(列)的 vscode:// 快速跳转链接",
   "version": "1.0.0",
   "publisher": "UCPr",
+  "license": "MIT",
+  "homepage": "https://github.com/UCPr251/copy-line-link#readme",
+  "bugs": {
+    "url": "https://github.com/UCPr251/copy-line-link/issues"
+  },
   "author": {
     "name": "UCPr",
     "url": "https://github.com/UCPr251"
