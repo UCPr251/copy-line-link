@@ -44,6 +44,16 @@
           "group": "9_cutcopypaste@5"
         }
       ]
+    },
+    "configuration": {
+      "title": "Copy Line Link",
+      "properties": {
+        "copy-line-link.markdownCopy": {
+          "type": "boolean",
+          "default": false,
+          "description": "开启后，复制内容自动转换为 Markdown 格式：`[filename](vscode://file/...)`"
+        }
+      }
     }
   },
   "scripts": {

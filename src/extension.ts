@@ -44,6 +44,23 @@ function getEditorInfo() {
   }
 }
 
+/**
+ * 根据 markdownCopy 配置项，决定是否将链接包装为 Markdown 格式。
+ */
+function formatLink(link: string): string {
+  const markdownMode = vscode.workspace
+    .getConfiguration('copy-line-link')
+    .get<boolean>('markdownCopy', false)
+
+  if (!markdownMode) return link
+
+  // 从链接中提取文件名（未编码的原始路径在 buildFileUri 阶段已编码，
+  // 这里取链接最后 / 之后、冒号之前的部分作为展示名）
+  const match = link.match(/vscode:\/\/file\/.+\/([^/]+?)(%3A\d|:\d)/)
+  const filename = match ? decodeURIComponent(match[1]) : 'file'
+  return `[${filename}](${link})`
+}
+
 export function activate(context: vscode.ExtensionContext) {
   // 复制行链接（仅行号，不含列号）
   const copyLineCmd = vscode.commands.registerCommand(
@@ -53,7 +70,8 @@ export function activate(context: vscode.ExtensionContext) {
       if (!info) return
 
       const link = buildFileUri(info.filePath, info.line)
-      vscode.env.clipboard.writeText(link).then(
+      const text = formatLink(link)
+      vscode.env.clipboard.writeText(text).then(
         () =>
           vscode.window.showInformationMessage(
             `已复制行链接: ${path.basename(info.filePath)}:${info.line}`
@@ -71,7 +89,8 @@ export function activate(context: vscode.ExtensionContext) {
       if (!info) return
 
       const link = buildFileUri(info.filePath, info.line, info.column)
-      vscode.env.clipboard.writeText(link).then(
+      const text = formatLink(link)
+      vscode.env.clipboard.writeText(text).then(
         () =>
           vscode.window.showInformationMessage(
             `已复制行列链接: ${path.basename(info.filePath)}:${info.line}:${info.column}`

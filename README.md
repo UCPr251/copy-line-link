@@ -16,6 +16,21 @@
 
 粘贴链接到浏览器地址栏或聊天工具中，点击即可在 VS Code 中打开对应文件并定位到指定行列。
 
+### Markdown 复制模式
+
+在 VS Code 设置中开启 `copy-line-link.markdownCopy` 后，复制的内容将自动包装为 Markdown 链接格式：
+
+| 设置 | 复制内容示例 |
+|------|-------------|
+| `false`（默认） | `vscode://file/E%3A/project/src/utils/auth.js:7` |
+| `true` | `[auth.js](vscode://file/E%3A/project/src/utils/auth.js:7)` |
+
+可在 `settings.json` 中配置：
+
+```json
+"copy-line-link.markdownCopy": true
+```
+
 ## 📥 安装
 
 ### 方式一：VSIX 安装
