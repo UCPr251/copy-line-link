@@ -1,0 +1,62 @@
+{
+  "name": "copy-line-link",
+  "displayName": "Copy Line Link",
+  "description": "右键复制文件指定行(列)的 vscode:// 快速跳转链接",
+  "version": "1.0.0",
+  "publisher": "UCPr",
+  "author": {
+    "name": "UCPr",
+    "url": "https://github.com/UCPr251"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UCPr251/copy-line-link"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "copy-line-link.copyLink",
+        "title": "复制行链接"
+      },
+      {
+        "command": "copy-line-link.copyLinkWithColumn",
+        "title": "复制行列链接"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "copy-line-link.copyLink",
+          "when": "editorTextFocus",
+          "group": "9_cutcopypaste@4"
+        },
+        {
+          "command": "copy-line-link.copyLinkWithColumn",
+          "when": "editorTextFocus",
+          "group": "9_cutcopypaste@5"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsgo",
+    "compile": "tsgo",
+    "watch": "tsgo --watch",
+    "check": "tsgo --noEmit",
+    "build": "tsgo && vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "@types/vscode": "^1.85.0",
+    "@typescript/native-preview": "7.0.0-dev.20260610.1",
+    "@vscode/vsce": "^3.9.2"
+  }
+}
