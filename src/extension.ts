@@ -2,7 +2,18 @@ import vscode from 'vscode'
 import path from 'path'
 
 /**
- * 将文件路径转换为 vscode://file 协议链接。
+ * 读取协议软件前缀（如 vscode、cursor），空值回退到 vscode。
+ */
+function getMarkdownPrefix(): string {
+  const prefix = vscode.workspace
+    .getConfiguration('copy-line-link')
+    .get<string>('markdownPrefix', 'vscode')
+    ?.trim()
+  return prefix || 'vscode'
+}
+
+/**
+ * 将文件路径转换为 ${prefix}://file 协议链接。
  * 对路径中的特殊字符（空格、中文等）进行 encodeURIComponent 编码，
  * 但保留路径分隔符和盘符冒号。
  */
@@ -28,7 +39,8 @@ function buildFileUri(filePath: string, line: number, column?: number): string {
       .map(encodeURIComponent)
       .join('/')
   }
-  return `vscode://file/${encoded}:${line}${column ? `:${column}` : ''}`
+  const prefix = getMarkdownPrefix()
+  return `${prefix}://file/${encoded}:${line}${column ? `:${column}` : ''}`
 }
 
 function getEditorInfo() {
@@ -56,7 +68,10 @@ function formatLink(link: string): string {
 
   // 从链接中提取文件名（未编码的原始路径在 buildFileUri 阶段已编码，
   // 这里取链接最后 / 之后、冒号之前的部分作为展示名）
-  const match = link.match(/vscode:\/\/file\/.+\/([^/]+?)(%3A\d|:\d)/)
+  const prefix = getMarkdownPrefix().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const match = link.match(
+    new RegExp(`${prefix}:\\/\\/file\\/.+\\/([^/]+?)(%3A\\d|:\\d)`)
+  )
   const filename = match ? decodeURIComponent(match[1]) : 'file'
   return `[${filename}](${link})`
 }
